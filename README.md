@@ -11,7 +11,7 @@ Funcionamiento:
 
 2. Abrir la solucion y fijarse que compile. En caso contrario instalar dependencia o abrir un issue
 
-3. En la solucion adentro de la funcion "BuscarPregunta" poner tu propia "api key". 
+3. En la solucion adentro de la funcion "BuscarPregunta" poner tu propia "api key"
    La podes encontrar aca:https://developers.google.com/custom-search/v1/overview
 
 4.Descomentar las primeras lineas para probar la pregunta de prueba
