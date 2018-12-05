@@ -11,7 +11,7 @@ Proyecto para facultad UTN-FRLP sin fines de lucro
 
 **Funcionamiento:**
 
-1. Descargar un emulador android(Recomendado: https://es.bignox.com/)
+1. Descargar un emulador android (Recomendado: https://es.bignox.com/)
 
 2. Abrir la solucion y fijarse que compile. En caso contrario instalar dependencia o abrir un issue
 
