@@ -13,5 +13,7 @@ Funcionamiento:
 La podes encontrar aca:https://developers.google.com/custom-search/v1/overview
 
 4.Descomentar las primeras lineas para probar la pregunta de prueba
+
 5.Esperar hasta que se haga un juego en ingame con el programa corriendo y el texto que dice "Esperando pregunta".
+
 6.Ver como sucede la magia
