@@ -13,7 +13,6 @@ Funcionamiento:
 
 3. En la solucion adentro de la funcion "BuscarPregunta" poner tu propia "api key"
 
-
 4.Descomentar las primeras lineas para probar la pregunta de prueba
 
 5.Esperar hasta que se haga un juego en ingame con el programa corriendo y el texto que dice "Esperando pregunta".
