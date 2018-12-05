@@ -1,7 +1,7 @@
 # InCheat
 Proyecto para facultad UTN-FRLP sin fines de lucro
 
-Dependencias:
+#Dependencias:
 
 . Restsharp (https://www.nuget.org/packages/RestSharp)
 
@@ -9,7 +9,7 @@ Dependencias:
 
 . Pcap.Net (https://github.com/PcapDotNet/Pcap.Net)
 
-Funcionamiento:
+#Funcionamiento:
 
 1. Descargar un emulador android(Recomendado: https://es.bignox.com/)
 
