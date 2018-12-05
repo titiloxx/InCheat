@@ -127,7 +127,7 @@ namespace ConsoleApp5
             var link = "https://google.com.ar/search?q={0}&oq={0}+&aqs=chrome..69i57j0l5.3305j0j7&sourceid=chrome&ie=UTF-8";
             Process.Start(String.Format(link, pregunta));
 
-            var client = new RestClient("https://www.googleapis.com/customsearch/v1?key=AIzaSyC9Gil_JfkDzADcp9UdmAPxwv27I3Tnjco&cx=009131617097369123982:z5bool75i68&q=" + pregunta);
+            var client = new RestClient("https://www.googleapis.com/customsearch/v1?key={TU-KEY-DE-GOOGLE}&cx=009131617097369123982:z5bool75i68&q=" + pregunta);
             var request = new RestRequest("", Method.GET);
             IRestResponse response = client.Execute(request);
             var content = SacarAcentos(response.Content.ToLower());
