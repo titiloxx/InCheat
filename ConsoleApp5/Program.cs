@@ -21,13 +21,12 @@ namespace ConsoleApp5
         delegate bool articulo(string str);
         static void Main(string[] args)
         {
-            //Pregunta p = new Pregunta { Id = "1", Titulo= "De que son las nuevas materias creadas por la Universidad de Binghamtom?", Opcion1= "Huracanes", Opcion2= "Tornados", Opcion3= "Tempestades" };
-
-
+            /* DESCOMENTAR ESTO PARA TESTEAR PREGUNTAS
+            Pregunta p = new Pregunta { Id = "1", Titulo= "De que son las nuevas materias creadas por la Universidad de Binghamtom?", Opcion1= "Huracanes", Opcion2= "Tornados", Opcion3= "Tempestades" };
             // CargarPregunta(p, new List<int> { 0, 10, 0 });
             //var lista = BuscarPregunta("Cual de estas novelas no tuvo segunda parte?", "El jardin del Eden", "Don quijote", "Ensayo sobre la ceguera");
             // Retrieve the device list from the local machine
-           /* var resultado = BuscarPregunta("Cual de estos libros fue escrito por el argentino hernan vanoli?", "Una misma noche", "Pyongyang", "Ninguno de los dos");
+            var resultado = BuscarPregunta("Cual de estos libros fue escrito por el argentino hernan vanoli?", "Una misma noche", "Pyongyang", "Ninguno de los dos");
             CargarPregunta(p, resultado);*/
             IList<LivePacketDevice> allDevices = LivePacketDevice.AllLocalMachine;
 
