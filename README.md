@@ -23,3 +23,5 @@ Proyecto para facultad UTN-FRLP sin fines de lucro
   5. Esperar hasta que se haga un juego en ingame con el programa corriendo y el texto que dice "Esperando pregunta".
 
   6. Ver como sucede la magia
+
+NOTA: Correr la aplicacion en x64, en x32 tira error el "Pcap.Net"
