@@ -12,7 +12,6 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Text.RegularExpressions;
 
 namespace ConsoleApp5
 {
@@ -22,23 +21,13 @@ namespace ConsoleApp5
         delegate bool articulo(string str);
         static void Main(string[] args)
         {
-            //    DESCOMENTAR ESTO PARA TESTEAR PREGUNTAS 
-               Pregunta p = new Pregunta { Id = "1", Titulo= "Quien es el presidente de Venezuela ? ", Opcion1= "Huracanes", Opcion2= "Tornados", Opcion3= "Tempestades" };
+            /* DESCOMENTAR ESTO PARA TESTEAR PREGUNTAS
+            Pregunta p = new Pregunta { Id = "1", Titulo= "De que son las nuevas materias creadas por la Universidad de Binghamtom?", Opcion1= "Huracanes", Opcion2= "Tornados", Opcion3= "Tempestades" };
             // CargarPregunta(p, new List<int> { 0, 10, 0 });
-            //   var lista = BuscarPregunta("Cual de estas novelas no tuvo segunda parte?", "El jardin del Eden", "Don quijote", "Ensayo sobre la ceguera");
+            //var lista = BuscarPregunta("Cual de estas novelas no tuvo segunda parte?", "El jardin del Eden", "Don quijote", "Ensayo sobre la ceguera");
             // Retrieve the device list from the local machine
-            //  var resultado = BuscarPregunta("Cual de estos libros fue escrito por el argentino hernan vanoli?", "Una misma noche", "Pyongyang", "Ninguno de los dos");
-            //    var resultado = BuscarPregunta("Cual de estas provincias tiene mayor superficie?", "Mendoza", "Buenos Aires", "Cordoba");
-            //var resultado = BuscarPregunta("Cual de estas paises tiene mayor superficie?", "Argentina", "Estados Unidos", "Brasil");
-            var resultado = BuscarPregunta("Cual de estos Albumes de divididos salió primero?", "La era de la boludez", "Narigon del siglo", "Vengo del placar de otro");
-            //var resultado = BuscarPregunta("Cual de estos Albumes de Scorpions salió primero?", "In Trance", "virgin killer", "Taken by Force");
-            //  var resultado = BuscarPregunta("Cual de estos Albumes de la Bersuit salió primero?", "De la cabeza", "libertinaje", "hijos del culo");
-            //        var resultado = BuscarPregunta("Cual de estos pintores nació primero?", "Miguel Angel", "Da vinci", "Donatello");
-            //  var resultado = BuscarPregunta("Quien no es un personaje de los simpsons ? ", "Bart", "Homer", "Rigoberto");
-            //   Pregunta p = new Pregunta { Id = "1", Titulo = "Quien es el presidente de Venuzuela?" };
-
-            CargarPregunta(p, resultado);
-            
+            var resultado = BuscarPregunta("Cual de estos libros fue escrito por el argentino hernan vanoli?", "Una misma noche", "Pyongyang", "Ninguno de los dos");
+            CargarPregunta(p, resultado);*/
             IList<LivePacketDevice> allDevices = LivePacketDevice.AllLocalMachine;
 
             if (allDevices.Count == 0)
@@ -58,7 +47,7 @@ namespace ConsoleApp5
                  else
                      Console.WriteLine(" (No description available)");*/
             }
-            string s = "--------------Esperando preguntas 2.0--------------";
+            string s = "--------------Esperando preguntas--------------";
             Console.WriteLine(s);
             int deviceIndex = 0;
             do
@@ -104,9 +93,7 @@ namespace ConsoleApp5
                         {
                             preguntaTotal = preg;
                             var resultado = BuscarPregunta(preg.Titulo, preg.Opcion1, preg.Opcion2, preg.Opcion3);
-                            
                             CargarPregunta(preg, resultado);
-                            
                         }
                        
                     }
@@ -139,72 +126,17 @@ namespace ConsoleApp5
             List<Dictionary<string, int>> listaRespuesta = new List<Dictionary<string, int>>();
             var link = "https://google.com.ar/search?q={0}&oq={0}+&aqs=chrome..69i57j0l5.3305j0j7&sourceid=chrome&ie=UTF-8";
             Process.Start(String.Format(link, pregunta));
-            //string key = "AIzaSyBtYnYNxCVgOayz-eGhcJTpnVcUwOEl4tA"; //Dario
-            string key = "AIzaSyCc_1lgl6aGFGCx331bNg9KjBBicXsNV8A";  //Ariel
-            var client = new RestClient("https://www.googleapis.com/customsearch/v1?key="+key+"&cx=009131617097369123982:z5bool75i68&q=" + pregunta);
-            var request = new RestRequest("", Method.GET);
-            IRestResponse response = client.Execute(request);             
-            var content = SacarAcentos(response.Content.ToLower());
 
+            var client = new RestClient("https://www.googleapis.com/customsearch/v1?key={TU-KEY-DE-GOOGLE}&cx=009131617097369123982:z5bool75i68&q=" + pregunta);
+            var request = new RestRequest("", Method.GET);
+            IRestResponse response = client.Execute(request);
+            var content = SacarAcentos(response.Content.ToLower());
             Task tarea = new Task(
             () =>
                     {
                         string titulo = "";
                         var wikipediaLista = BuscarWikipedia(response.Content, listaOpciones[0], listaOpciones[1], listaOpciones[2],ref titulo);
                         ImprimirBloque(titulo, wikipediaLista);
-                        pregunta = SacarAcentos(pregunta.ToLower());
-                        if (pregunta.Contains("cual"))
-                        {
-                            var respuesta = "";
-                            if (pregunta.Contains("superficie"))
-                            {
-                                Console.WriteLine("\nBuscando superficies\n");
-                                for (int i = 0; i < 3; i++)
-                                {
-                                    client = new RestClient("https://www.googleapis.com/customsearch/v1?key=" + key + "&cx=009131617097369123982:z5bool75i68&q=superficie+" + listaOpciones[i]);
-                                    request = new RestRequest("", Method.GET);
-                                    response = client.Execute(request);
-                                    content = SacarAcentos(response.Content.ToLower());
-                                    string opcion = listaOpciones[i].ToString();
-                                    respuesta = BuscarWikipediaSuperficie(response.Content, opcion);
-                                    ImprimirOpcion("superficie " + opcion, respuesta);
-                                }
-                            }
-                            else if (pregunta.Contains("albumes") || pregunta.Contains("albunes"))
-                            {
-                                Console.WriteLine("\nBuscando Albumes\n");
-                                for (int i = 0; i < 3; i++)
-                                {                                   
-                                    string opcion = listaOpciones[i].ToString();
-                                    string pepe = opcion.ToString().Replace(" ", "+");
-                                    client = new RestClient("https://www.googleapis.com/customsearch/v1?key=" + key + "&cx=009131617097369123982:z5bool75i68&q=album+" + pepe);
-                                    request = new RestRequest("", Method.GET);
-                                    response = client.Execute(request);
-                                    content = SacarAcentos(response.Content.ToLower());
-                                   // Console.WriteLine("content:" + response.Content);
-                                    
-                                    respuesta = BuscarWikipediaAlbum(response.Content, opcion);
-                                    ImprimirOpcion("album " + opcion, respuesta);
-                                }
-                            }
-                            else if (pregunta.Contains("nacio") || pregunta.Contains("joven"))
-                            {
-                                Console.WriteLine("\nBuscando fechas\n");
-                                for (int i = 0; i < 3; i++)
-                                {
-                                    string opcion = listaOpciones[i].ToString();
-                                    string pepe = opcion.ToString().Replace(" ", "+");
-                                    client = new RestClient("https://www.googleapis.com/customsearch/v1?key=" + key + "&cx=009131617097369123982:z5bool75i68&q=birth+" + pepe);
-                                    request = new RestRequest("", Method.GET);
-                                    response = client.Execute(request);
-                                    content = SacarAcentos(response.Content.ToLower());
-                                    // Console.WriteLine("content:" + response.Content);
-
-                                    respuesta = BuscarWikipediaNacimiento(response.Content, opcion);
-                                    ImprimirOpcion("fecha nacimiento " + opcion, respuesta);
-                                }
-                            }
-                        }
                     }
                  );
             tarea.Start();
@@ -215,7 +147,7 @@ namespace ConsoleApp5
                 listaRespuesta.Add(BuscarPalabra(content, listaOpciones[i], SinRepetidos[i]));
             }
             return listaRespuesta;
-        }        
+        }
 
         private static string SacarAcentos(string stringx)
         {
@@ -261,7 +193,6 @@ namespace ConsoleApp5
                         request.AddHeader("Accept-Encoding", "gzip, deflate");
                         request.AddHeader("Accept-Language", "es-ES,es;q=0.9,en-US;q=0.8,en;q=0.7");
                         IRestResponse response = client.Execute(request);
-                       // Console.WriteLine("wiki:" + response.Content);
                         var content = SacarAcentos(response.Content.ToLower());
                         List<string> listaOpciones = new List<string> { SacarAcentos(opcion1.ToLower()), SacarAcentos(opcion2.ToLower()), SacarAcentos(opcion3.ToLower()) };
                         var SinRepetidos=SacarRepetidos(listaOpciones);
@@ -269,7 +200,8 @@ namespace ConsoleApp5
                         for (int i = 0; i < listaOpciones.Count; i++)
                         {
                             lista.Add(BuscarPalabra(content, listaOpciones[i], SinRepetidos[i]));
-                        }                          
+                        }
+                          
                       
                      titulo = ((JValue)item["title"]).Value.ToString().Split(',')[0];
                      return lista;
@@ -282,148 +214,8 @@ namespace ConsoleApp5
                 return new List<Dictionary<string, int>> { };
               
             }
+
          }
-
-        private static string BuscarWikipediaSuperficie(string respuesta, string opcion)
-        {
-            var segundaParte = "";
-            try
-            {
-                JObject json = JObject.Parse(respuesta);
-                foreach (JObject item in json["items"])
-                {
-                    string link = ((JValue)item["link"]).Value.ToString();
-                    //   busqueda=busqueda.Replace(" ", "%20");                   
-                    
-                    if (link.ToLower().Contains("wikipedia"))
-                    {
-                        var client = new RestClient(link);
-                        var request = new RestRequest("", Method.GET);
-                        client.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36";
-                        request.AddHeader("Cache-Control", "max-age=0");
-                        request.AddHeader("Upgrade-Insecure-Requests", "1");
-                        request.AddHeader("Accept", "application/json");
-                        request.AddHeader("Accept-Encoding", "gzip, deflate");
-                        request.AddHeader("Accept-Language", "es-ES,es;q=0.9,en-US;q=0.8,en;q=0.7");
-                        request.AddHeader("format", "json");
-                        IRestResponse response = client.Execute(request);                        
-                        var content = SacarAcentos(response.Content.ToLower());
-                        string primerParte = (response.Content.Substring(response.Content.IndexOf("Total</th>")+10, 100).Replace("&#160;","."));
-                        segundaParte = sacarBasura(primerParte);                        
-                    }
-                    return segundaParte;
-                }
-                return segundaParte;
-            }
-            catch
-            {
-                return "ni idea capo";
-
-            }
-        }
-
-        private static string BuscarWikipediaAlbum(string respuesta, string opcion)
-        {
-            var segundaParte = "";
-            try
-            {
-                JObject json = JObject.Parse(respuesta);
-                foreach (JObject item in json["items"])
-                {
-                    string link = ((JValue)item["link"]).Value.ToString();
-                    //   busqueda=busqueda.Replace(" ", "%20");                   
-
-                    if (link.ToLower().Contains("wikipedia"))
-                    {
-                        var client = new RestClient(link);
-                        var request = new RestRequest("", Method.GET);
-                        client.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36";
-                        request.AddHeader("Cache-Control", "max-age=0");
-                        request.AddHeader("Upgrade-Insecure-Requests", "1");
-                        request.AddHeader("Accept", "application/json");
-                        request.AddHeader("Accept-Encoding", "gzip, deflate");
-                        request.AddHeader("Accept-Language", "es-ES,es;q=0.9,en-US;q=0.8,en;q=0.7");
-                        request.AddHeader("format", "json");
-                        IRestResponse response = client.Execute(request);
-                        var content = SacarAcentos(response.Content.ToLower());
-                     //             Console.WriteLine("content: " + content);
-                        int indice = response.Content.IndexOf("Publicación</th>");
-                        string primerParte = "";
-                        //         Console.WriteLine("indice: " + indice);
-                        if (!indice.Equals(-1))
-                        {
-                            primerParte = (response.Content.Substring(indice + 16, 100));
-                        }
-                        else { 
-                            indice = response.Content.IndexOf("<td class=\"published\">");
-                            primerParte = (response.Content.Substring(indice + 22, 30));
-                //            Console.WriteLine("indice: " + indice);
-                        }
-                        
-                    //    Console.WriteLine("primera: " + primerParte);
-                        segundaParte = sacarBasura(primerParte);
-                    }
-                    return segundaParte;
-                }
-                return segundaParte;
-            }
-            catch
-            {
-                return "ni idea capo";
-            }
-        }
-
-        private static string BuscarWikipediaNacimiento(string respuesta, string opcion)
-        {
-            var segundaParte = "";
-            try
-            {
-                JObject json = JObject.Parse(respuesta);
-                foreach (JObject item in json["items"])
-                {
-                    string link = ((JValue)item["link"]).Value.ToString();
-                    //   busqueda=busqueda.Replace(" ", "%20");                   
-
-                    if (link.ToLower().Contains("wikipedia"))
-                    {
-                        var client = new RestClient(link);
-                        var request = new RestRequest("", Method.GET);
-                        client.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36";
-                        request.AddHeader("Cache-Control", "max-age=0");
-                        request.AddHeader("Upgrade-Insecure-Requests", "1");
-                        request.AddHeader("Accept", "application/json");
-                        request.AddHeader("Accept-Encoding", "gzip, deflate");
-                        request.AddHeader("Accept-Language", "es-ES,es;q=0.9,en-US;q=0.8,en;q=0.7");
-                        request.AddHeader("format", "json");
-                        IRestResponse response = client.Execute(request);
-                        var content = SacarAcentos(response.Content.ToLower());
-                       // Console.WriteLine("content: " + response.Content);
-                        int indice = response.Content.IndexOf("<th scope=\"row\">Born</th>");
-                        string primerParte = "";
-                        //Console.WriteLine("indice: " + indice);
-                        if (!indice.Equals(-1))
-                        {
-                            primerParte = (response.Content.Substring(indice + 26, 200));
-                        }
-                        else
-                        {
-                            indice = response.Content.IndexOf("<th scope=\"row\">born</th>");
-                            primerParte = (response.Content.Substring(indice + 26, 200));
-                       //     Console.WriteLine("indice2: " + indice);
-                        }
-
-                        Console.WriteLine("primera: " + primerParte);
-                        segundaParte = sacarBasura(primerParte);
-                    }
-                    return segundaParte;
-                }
-                return segundaParte;
-            }
-            catch
-            {
-                return "ni idea capo";
-            }
-        }
 
         //Devuelve un diccionario con la palabra buscada y la cantidad de veces que aparece
         private static Dictionary<string,int> BuscarPalabra(string content, string opcion,string opcionEditada)
@@ -496,15 +288,8 @@ namespace ConsoleApp5
             return dict;
         }
 
-        private static string sacarBasura(string text)
-        {
-            string a = Regex.Replace(text, "<.*?>", String.Empty);
-       
-            return Regex.Replace(a.Substring(0, a.IndexOf("<")), "\n", String.Empty);
-        }
-
         //Saca los elementos repetidos entre todas las opciones
-        private static List<string> SacarRepetidos(List<string> listaOpciones)
+       private static List<string> SacarRepetidos(List<string> listaOpciones)
         {
             List<List<string>> lista = new List<List<string>>();
             List<string> listaAux = new List<string>();
@@ -579,12 +364,6 @@ namespace ConsoleApp5
 
         }
 
-        private static void ImprimirOpcion(string pregunta, string respuesta)
-        {            
-                Console.WriteLine("------------"); 
-                Console.WriteLine(pregunta+"\t"+respuesta);               
-        }
-
         private static void ImprimirLista(List<Dictionary<string, int>> lista)
         {
             foreach (var dict in lista)
@@ -601,3 +380,4 @@ namespace ConsoleApp5
         }
     }
  }
+
